@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+{% block title %}mis a jour{% endblock %}
+{% block content %}
+<div class="container">
+<h2>Mettre à jour une tache</h2>
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Titre du pense-bête" value="{{ tache.title }}" required><br>
+   
+    <textarea name="description" placeholder="Description" rows="4" cols="50">{{ tache.description }}</textarea><br><br>
+
+    Priorité<br>
+    <select name="priority" id="priority" required>
+        <option value="">Sélectionnez une priorité</option>
+        <option value=0 {% if tache.priority == 0 %}selected{% endif %}>Faible</option>
+        <option value=1 {% if tache.priority == 1 %}selected{% endif %}>Moyenne</option>
+        <option value=2 {% if tache.priority == 2 %}selected{% endif %}>Élevée</option>
+    </select><br><br>
+    Date limite<br>
+    <input type="date" name="deadline" placeholder="Date limite" value="{{ tache.deadline.strftime('%Y-%m-%d') }}" required><br>
+    Statut<br>
+    <select name="status" id="status" required>
+        <option value="">Sélectionnez un statut</option>
+        <option value="Fait" {% if tache.status == "Fait" %}selected{% endif %}>Fait</option>
+        <option value="En cours" {% if tache.status == "En cours" %}selected{% endif %}>En cours</option>
+        <option value="Pas fait" {% if tache.status == "Pas fait" %}selected{% endif %}>Pas fait</option>
+    </select><br><br>
+
+    <h3>Fichiers actuels</h3>
+    {% if tache.files %}
+        {% for file in tache.files %}
+            <div>
+                {{file.filename}} : <a href="{{ url_for('download_file', file_id=file.id) }}" target="_blank">Voir la PJ</a>
+                <input type="checkbox" name="delete_files" value="{{ file.id }}"> Supprimer
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucun fichier attaché</p>
+    {% endif %}
+
+    <h3>Ajouter de nouveaux fichiers</h3>
+    <div id="file-upload-container">
+        <input type="file" name="files">
+    </div>
+
+    <button type="button" onclick="addFileField()">Ajouter un autre fichier</button>
+    <button type="submit">Mettre à jour</button>
+    <button type="button" onclick="window.location.href='{{ url_for('dashboard') }}'">Annuler</button>
+</form>
+
+<script>
+    // Fonction pour ajouter un nouveau champ de fichier
+    function addFileField() {
+        var container = document.getElementById("file-upload-container");
+        var newField = document.createElement("input");
+        newField.type = "file";
+        newField.name = "files";
+        container.appendChild(newField);
+
+    }
+</script>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app_v1:
+    build:
+      context: ./v1
+      dockerfile: Dockerfile
+    ports:
+      - "8001:80"
+      - "2200:22"
+    container_name: app_version_1
+
+  app_v2:
+    build:
+      context: ./v2
+      dockerfile: Dockerfile
+    ports:
+      - "8002:80"
+      - "2222:22"   # SSH
+    container_name: app_version_2

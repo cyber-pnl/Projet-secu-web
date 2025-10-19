@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Tableau de bord{% endblock %}
+{% block content %}
+<div class="container">
+   
+        <div class="header">
+            <h1>Bienvenue, {{ current_user.prenom }} !</h1>
+            <a href="{{ url_for('creer_groupe') }}" class="btn"><i class="fa fa-users"></i> Créer un groupe</a>
+        </div>
+
+        <div class="section">
+            <h2>Vos tâches personnelles</h2>
+            {% if tasks %}
+                <ul class="task-list">
+                    {% for task in tasks %}
+                        <li>
+                            <strong>{{ task.title }}</strong> — 
+                            <span>Status : <em>{{ task.status }}</em></span>
+                            <a href="{{ url_for('view_task', id=task.id) }}">Consulter</a>
+                            <a href="{{ url_for('supprimer_task', task_id=task.id) }}">Supprimer</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucune tâche pour l’instant.</p>
+            {% endif %}
+            <br>
+            <a href="{{ url_for('create_task') }}" class="btn">Ajouter une tâche</a>
+        </div>
+        
+        <div class="section">
+
+            <!-- Groupes auxquels l'utilisateur est membre -->
+            {% if current_user.groups %}
+                <h3>Vos Groupes</h3>
+                <ul class="group-list">
+                    {% for group in current_user.groups %}
+                        <li>
+                            <strong>{{ group.name }}</strong> 
+                            <a href="{{ url_for('voir_groupe', groupe_id=group.id) }}">Voir</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Vous n’êtes membre d’aucun groupe.</p>
+            {% endif %}
+        </div>
+        
+        <br>
+        <a href="{{ url_for('create_task') }}">
+            <button>Ajouter une tâche</button>
+        </a><br>
+        <a href="{{ url_for('calendar') }}">
+            <button>Calendrier des tâches</button>
+        </a>
+            
+</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+<!-- A ne pas utiliser -->
+
+{% extends 'base.html' %}
+{% block title %}Créer une tâche{% endblock %}
+{% block content %}
+ <div>
+    <h2>Créer une nouvelle tâche</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Titre :</label>
+        <input type="text" name="title" required><br><br>
+
+        <label>Description :</label><br>
+        <textarea name="description" rows="5" cols="40" required></textarea><br><br>
+
+        <label>Priorité :</label>
+        <select name="priority">
+            <option value="haute">Haute</option>
+            <option value="moyenne">Moyenne</option>
+            <option value="faible">Faible</option>
+        </select><br><br>
+
+        <label>Deadline :</label>
+        <input type="date" name="deadline" required><br><br>
+
+        <label>Pièces jointes :</label>
+        <input type="file" name="fichiers" multiple><br><br>
+        <div class="file-info">
+            (Seuls les fichiers .txt, .pdf, .png, .jpg, .jpeg, .gif, .docx ,.zip,.csv,.xlsx, .ppt sont autorisés)
+        </div><br>
+
+        <button type="submit">Créer la tâche</button>
+    </form>
+</div>
+{% endblock %}

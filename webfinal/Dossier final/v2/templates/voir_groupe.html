@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Voir groupe{% endblock %}
+{% block content %}
+   
+<div class="container">
+    <h2>{{ group.name }}</h2>
+    <p><strong>Description :</strong> {{ group.description }}</p>
+
+    <!-- Membres -->
+    <h3>Membres du groupe</h3>
+    <div class="members-list">
+        {% for member in group.members %}
+            <div class="member-item">
+                <div>
+                    <strong>{{ member.prenom }} {{ member.nom }}</strong>
+                    {% if member.id == group.admin_id %}
+                        <span class="admin-badge">Admin</span>
+                    {% endif %}
+                </div>
+                {% if member.id != current_user.id %}
+                    <form class="inline" action="{{ url_for('retirer_membre', groupe_id=group.id, membre_id=member.id) }}" method="POST">
+                        <button type="submit" class="btn-remove">Retirer</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Ajouter un membre -->
+    <div class="add-section">
+        <h3>Ajouter un membre</h3>
+        <form action="{{ url_for('ajouter_membre', groupe_id=group.id) }}" method="POST">
+            <input type="email" name="email" placeholder="Email du membre" required>
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
+
+    <!-- Tâches -->
+    <h3>Tâches du groupe</h3>
+    <div class="tasks-list">
+        {% if group.tasks %}
+            {% for task in group.tasks %}
+                <div class="task-item">
+                    <h4>{{ task.title }}</h4>
+                    <p><strong>Description :</strong> {{ task.description }}</p>
+                    <p><strong>Priorité :</strong> 
+                        
+                        {% if task.priority == 0 %}
+                            Faible
+                        {% elif task.priority == 1 %}
+                            Moyenne
+                        {% elif task.priority == 2 %}
+                            Élevée
+                        {% else %}
+                            Non définie
+                        {% endif %}
+                    </p>
+                    <p><strong>Deadline :</strong> {{ task.deadline.strftime('%d/%m/%Y') if task.deadline else "Aucune" }}</p>
+                    {% if task.fichier %}
+                        <p><a href="{{ url_for('download_file', filename=task.fichier) }}">📎 Télécharger la pièce jointe</a></p>
+                    {% endif %}
+                    <form class="inline" action="{{ url_for('modifier_tache', groupe_id=group.id, task_id=task.id) }}" method="GET">
+                        <button type="submit" class="btn-edit">Modifier</button>
+                    </form>
+                    <form class="inline" action="{{ url_for('supprimer_tache', groupe_id=group.id, task_id=task.id) }}" method="POST">
+                        <button type="submit" class="btn-remove">Supprimer</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune tâche pour ce groupe.</p>
+        {% endif %}
+    </div>
+
+    <!-- Ajouter une tâche -->
+    <div class="add-section">
+        <h3>Ajouter une tâche</h3>
+        <form action="{{ url_for('ajouter_tache', groupe_id=group.id) }}" method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Titre" required>
+            <textarea name="description" placeholder="Description"></textarea>
+            <select name="priority" id="priority" required>
+                <option value="">Sélectionnez une priorité</option>
+                <option value=0>Faible</option>
+                <option value=1>Moyenne</option>
+                <option value=2>Élevée</option>
+            </select>
+            <input type="date" name="deadline">
+            <input type="file" name="file">
+            <button type="submit">Créer</button>
+        </form>
+    </div>
+
+    <!-- Retour et suppression -->
+    <br>
+    <a href="{{ url_for('dashboard') }}">← Retour au tableau de bord</a> |
+    <a href="{{ url_for('supprimer_groupe', groupe_id=group.id) }}" style="color: red;">🗑 Supprimer le groupe</a>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Ajouter un membre au groupe{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Ajouter un membre au groupe : {{ groupe.name }}</h1>
+        <form method="POST">
+            <label for="prenom">Rechercher par prénom :</label>
+            <input type="text" name="prenom" id="prenom" placeholder="Prénom de l'utilisateur" required>
+            <button type="submit">Rechercher</button>
+        </form>
+
+        {% if utilisateurs %}
+            <h2>Résultats de la recherche :</h2>
+            <ul>
+                {% for utilisateur in utilisateurs %}
+                    <li>
+                        <strong>{{ utilisateur.prenom }} {{ utilisateur.nom }}</strong>
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="utilisateur_id" value="{{ utilisateur.id }}">
+                            <button type="submit">Ajouter au groupe</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <a href="{{ url_for('view_group', groupe_id=groupe.id) }}">Retour au groupe</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Créer un pense-bête{% endblock %}
+{% block content %}
+<div class="container">
+<h2>Créer un pense-bête</h2>
+<div class="add-section">
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Titre du pense-bête" required><br>
+    <textarea name="description" placeholder="Description" rows="4" cols="50"></textarea><br><br>
+    Priorité<br>
+    <select name="priority" id="priority" required>
+        <option value="">Sélectionnez une priorité</option>
+        <option value=0>Faible</option>
+        <option value=1>Moyenne</option>
+        <option value=2>Élevée</option>
+    </select><br><br>
+    Date limite<br>
+    <input type="date" name="deadline" placeholder="Date limite" required><br>
+    Statut<br>
+    <select name="status" id="status" required>
+        <option value="">Sélectionnez un statut</option>
+        <option value="Fait">Fait</option>
+        <option value="En cours">En cours</option>
+        <option value="Pas fait">Pas fait</option>
+    </select><br><br>
+    <label for="files">Choisissez un ou plusieurs fichiers à télécharger (optionnel)</label><br>
+    <div id="file-upload-container">
+        <input type="file" name="files">
+    </div>
+    <button type="button" onclick="addFileField()">Ajouter un autre fichier</button>
+    <button type="submit">Valider</button>
+    <button type="reset">Remettre à zéro</button>
+    <button type="button" onclick="window.location.href='{{ url_for('dashboard') }}'">Annuler</button>
+</form>
+
+
+<script>
+    // Fonction pour ajouter un nouveau champ de fichier
+    function addFileField() {
+        var container = document.getElementById("file-upload-container");
+        var newField = document.createElement("input");
+        newField.type = "file";
+        newField.name = "files";
+        container.appendChild(newField);
+    }
+</script>
+</div>
+</div>
+{% endblock %}

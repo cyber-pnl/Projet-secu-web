@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Créer un Groupe{% endblock %}
+{% block content %}
+<div class="container">
+        <h2>Créer un Groupe</h2>
+        <div class="add-section">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Nom du groupe :</label>
+            <input type="text" name="name" required>
+
+            <label>Description du groupe :</label>
+            <input type="text" name="description" required>
+
+            <!-- <label>Ajouter un membre :</label> -->
+            <input type="hidden" id="search" name="search" placeholder="Rechercher un utilisateur" autocomplete="off">
+            <div id="search-results" class="search-results"></div>
+
+<!--             <label>Membres sélectionnés :</label>
+ -->            <ul type="hidden" id="selected-members"></ul>
+            <input type="hidden" id="members" name="members" value="">
+
+            <hr>
+            <h3>Ajouter une Tâche pour le groupe</h3>
+
+            <label>Titre :</label>
+            <input type="text" name="task_title">
+
+            <label>Description :</label>
+            <textarea name="task_description" rows="4"></textarea>
+
+            <label>Priorité :</label>
+            <select name="task_priority" id="priority" required>
+                <option value="">Sélectionnez une priorité</option>
+                <option value=0>Faible</option>
+                <option value=1>Moyenne</option>
+                <option value=2>Élevée</option>
+            </select>
+
+            <label>Deadline :</label>
+            <input type="date" name="task_deadline">
+
+            <label>Pièces jointes :</label>
+            <input type="file" name="task_files" multiple>
+
+            <button type="submit">Créer le groupe</button>
+        </form>
+    <script>
+        const searchInput = document.getElementById('search');
+        const searchResults = document.getElementById('search-results');
+        const selectedMembersList = document.getElementById('selected-members');
+        const membersInput = document.getElementById('members');
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value;
+            if (query.length > 0) {
+                fetch(`/rechercher_utilisateur?prénom=${query}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        searchResults.innerHTML = '';
+                        data.forEach(user => {
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('user-item');
+                            userDiv.textContent = `${user.prenom} ${user.nom}`;
+                            userDiv.onclick = () => ajouterMembre(user.id, user.prenom, user.nom);
+                            searchResults.appendChild(userDiv);
+                        });
+                    });
+            } else {
+                searchResults.innerHTML = '';
+            }
+        });
+
+        function ajouterMembre(userId, prenom, nom) {
+            // Vérifiez si l'utilisateur est déjà dans la liste des membres sélectionnés
+            const existingMember = Array.from(selectedMembersList.children).find(li => li.getAttribute('data-id') === userId.toString());
+            if (existingMember) {
+                alert('Cet utilisateur est déjà ajouté.');
+                return;
+            }
+        
+            const memberItem = document.createElement('li');
+            memberItem.textContent = `${prenom} ${nom}`;
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'Supprimer';
+            removeBtn.onclick = () => {
+                selectedMembersList.removeChild(memberItem);
+                mettreAJourMembres();
+            };
+            memberItem.appendChild(removeBtn);
+            selectedMembersList.appendChild(memberItem);
+            memberItem.setAttribute('data-id', userId);
+            mettreAJourMembres();
+        }
+
+        function mettreAJourMembres() {
+            const ids = Array.from(selectedMembersList.children).map(li => li.getAttribute('data-id'));
+            membersInput.value = ids.join(',');
+        }
+    </script>
+    </div>
+</div>
+{% endblock %}

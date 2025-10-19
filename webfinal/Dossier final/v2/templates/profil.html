@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Mon profil{% endblock %}
+{% block content %} 
+    <div class="container">
+        <h2>Profil de l'utilisateur</h2>
+        <div class="info"><strong>Nom :</strong> {{ user.nom }}</div>
+        <div class="info"><strong>Prénom :</strong> {{ user.prenom }}</div>
+        <div class="info"><strong>Email :</strong> {{ user.email }}</div>
+        <a href="{{ url_for('edit_profil') }}">Modifier mes infos</a> |
+        <a href="{{ url_for('edit_credentials') }}">Modifier email/mot de passe</a>
+
+    </div>
+{% endblock %}
+
