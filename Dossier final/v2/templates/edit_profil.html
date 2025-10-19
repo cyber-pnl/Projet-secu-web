@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}update profil{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <h2>Modifier les informations du profil</h2>
+
+        <!-- Afficher des messages d'erreur ou succès -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="info">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" value="{{ user.nom }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" value="{{ user.prenom }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date_naissance">Date de naissance :</label>
+                <input type="date" id="date_naissance" name="date_naissance" value="{{ user.date_naissance }}" required>
+            </div>
+
+            <button type="submit">Enregistrer les modifications</button>
+        </form>
+    </div>
+{% endblock %}

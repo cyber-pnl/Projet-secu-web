@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo app</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div class="top-bar">
+      <a href="{{ url_for('register') }}" style="margin-right: 20px;">S'inscrire</a>
+      
+    </div>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  
+  {% block content %}{% endblock %}
+<h2>Connexion</h2>
+<form method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="password" name="password" placeholder="Mot de passe" required><br>
+    <button type="submit">Se connecter</button>
+</form>
+<p>Vous n'avez pas de compte ? <a href="{{ url_for('register') }}">Créez-en un</a>.</p>
+</div>
+<script>
+  // Fonction pour faire disparaître les messages flash
+  document.addEventListener('DOMContentLoaded', function() {
+      const flashMessages = document.querySelectorAll('.flashes');
+      
+      flashMessages.forEach(function(message) {
+          // Faire disparaître après 5 secondes (5000 ms)
+          setTimeout(function() {
+              message.style.opacity = '0';
+              
+              // Supprimer l'élément du DOM après la fin de la transition
+              setTimeout(function() {
+                  message.remove();
+              }, 500); // Correspond à la durée de la transition CSS
+              
+          }, 5000);
+      });
+  });
+</script>
+</body>
+</html>
+

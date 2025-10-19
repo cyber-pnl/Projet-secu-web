@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+<div>
+    <h1>La tâche : {{tache.title }}</h1>
+</div>
+
+<div class="block">
+    <div class="details">
+        <h3>Description</h3>
+        <p> {{tache.description}}</p>
+        
+        <span> priorité :
+            {% if tache.priority == 0 %}
+                Faible
+            {% elif tache.priority == 1 %}
+                Moyenne
+            {% elif tache.priority == 2 %}
+                Élevée
+            {% else %}
+                Non définie
+            {% endif %}
+        </span>
+        <span>status : {{tache.status}}</span>
+        <span>deadline : {{tache.deadline}}</span>
+    
+    </div>
+    <div class="fichier">
+        <h3>Listes des pièces jointes</h3>
+        {% if tache.files %}
+        {% for file in tache.files %}
+        <ul>
+            <li>{{file.filename}} : <a href="{{ url_for('download_file', file_id=file.id) }}" target="_blank"> Voir la PJ</a>
+            </li>
+        </ul>
+        {% endfor %}
+        {% else %}
+         <p>Aucun fichier attaché</p>
+        {% endif %}
+
+    </div>
+</div>
+<div class="ligne"> 
+<button type="button" onclick="window.location.href='{{ url_for('dashboard') }}'">Retour à l'accueil</button>
+
+
+{% if tache.status != "Fait"%}
+
+    <button type="button" onclick="window.location.href='{{ url_for('update', task_id=tache.id) }}'">Update</button>
+    <button type="button" onclick="window.location.href='{{ url_for('supprimer_task', task_id=tache.id) }}'">Supprimer</button>
+    <button type="button" onclick="window.location.href='{{ url_for('finished', task_id=tache.id) }}'">Terminate</button>
+
+{% endif %}
+</div>
+{% endblock %}
