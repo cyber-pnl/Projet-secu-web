@@ -117,13 +117,6 @@ Notes sur l'exploitation et les tests
 - Favorisez des tests automatisés dans /vulns/tests-... pour reproductibilité.  
 - N'incluez pas d'outils intrusifs sur des environnements partagés sans autorisation.
 
-Guide de correction (workflow suggéré)
--------------------------------------
-1. Reproduire la vulnérabilité et documenter (captures, payloads).  
-2. Proposer un ou plusieurs correctifs dans /patches/<nom_vuln>.  
-3. Implémenter le correctif sur une branche dédiée.  
-4. Écrire des tests de non-régression (unitaires/functional) pour couvrir le cas.  
-5. Revoir et merger quand validé.
 
 Bonnes pratiques de sécurité à intégrer
 --------------------------------------
@@ -133,20 +126,6 @@ Bonnes pratiques de sécurité à intégrer
 - Chiffrement des données sensibles en transit (HTTPS) et au repos si nécessaire
 - Journalisation et monitoring des activités suspectes
 
-Contribuer
-----------
-- Ouvrez une issue pour proposer des vulnérabilités supplémentaires, des corrections ou des améliorations de documentation.  
-- Faites des Pull Requests claires : description, étapes pour reproduire, tests ajoutés, risques potentiels.
-
-Licence
--------
-Indiquez ici la licence choisie (ex : MIT, CC-BY-SA). Si projet académique, préciser les conditions de réutilisation.
-
-Auteurs et contacts
--------------------
-- Auteur principal : [Votre nom / pseudo]  
-- Contact : [email ou autre moyen]  
-- Équipe pédagogique / encadrant : [Nom(s)]
 
 Ressources utiles
 -----------------
@@ -154,6 +133,3 @@ Ressources utiles
 - Web Security Academy — https://portswigger.net/web-security  
 - Documentation officielle des frameworks utilisés (Express, Django, etc.)
 
-Remarques finales
------------------
-Ce README est une base. Adaptez-le au contenu réel du dépôt : précisez la stack exacte, la procédure d'installation, les ports et les scripts disponibles. Documentez chaque vulnérabilité présente dans le code avec les preuves d'exploitation et les correctifs appliqués pour garder une traçabilité pédagogique complète.
